@@ -32,7 +32,29 @@ $ ./cv -c domain [-pp] [-v]
 
 ### EXAMPLES
 ```sh
-$ ./cv -u http://www.onegossip.it/wp-content/uploads/2013/12/Michael_Schumacher.jpg -c recognize -pp 
+$ ./cv -u http://www.onegossip.it/wp-content/uploads/2013/12/Michael_Schumacher.jpg -c recognize -pp
+{
+  "requestId": "273ed75e-d19c-4660-8f16-1f319d7e41ff",
+  "metadata": {
+    "width": 300,
+    "height": 300,
+    "format": "Jpeg"
+  },
+  "result": {
+    "celebrities": [
+      {
+        "name": "Michael Schumacher",
+        "faceRectangle": {
+          "left": 96,
+          "top": 61,
+          "width": 99,
+          "height": 99
+        },
+        "confidence": 0.9999989
+      }
+    ]
+  }
+} 
 ```
 
 ### FEATURES
