@@ -24,15 +24,16 @@ $ env GOOS=linux GOARCH=arm GOARM=6 go build -v -o cv-rpi
 First rename file `config.toml.demo` to `config.toml` and replace your API keys.
 Basic usage: 
 ```sh
-$ ./cv -u <URL_IMAGE> -c [analyze|ocr|tag] [-pp]
-$ ./cv -f <IMAGE_PATH> -c [analyze|ocr|tag] [-pp]
+$ ./cv -u <URL_IMAGE> -c [ocr|tag|analyze|describe] [-pp] [-v]
+$ ./cv -f <IMAGE_PATH> -c [ocr|tag|analyze|describe] [-pp] [-v]
+$ ./cv -c domain [-pp] [-v]
 ```
 
 ### FEATURES
 - [x] ANALIZE
-- [ ] DESCRIBE
+- [x] DESCRIBE
 - [ ] THUMBNAIL
-- [ ] LIST DOMAIN
+- [x] LIST DOMAIN
 - [x] OCR
 - [ ] RECOGNIZE DOMAIN
 - [x] TAG

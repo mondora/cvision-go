@@ -17,20 +17,18 @@ const (
 // AnalyzeClient struct
 type AnalyzeClient struct {
 	APIToken *string
-	Verbose  bool
 }
 
 // NewAnalyzeClient with parameters
 func NewAnalyzeClient(token string) *AnalyzeClient {
 	return &AnalyzeClient{
 		APIToken: &token,
-		Verbose:  true,
 	}
 }
 
 // GetAnalyzeInfo return json info related to image resourceName
-func (c *AnalyzeClient) GetAnalyzeInfo(resourceName string, isURL bool) (*resty.Response, error) {
-	if c.Verbose {
+func (c *AnalyzeClient) GetAnalyzeInfo(resourceName string, isURL bool, verbose bool) (*resty.Response, error) {
+	if verbose {
 		log.Printf("> GetAnalyzeInfo: %s\n", resourceName)
 	}
 	visualFeatures := "Categories,Tags,Description,Faces,ImageType,Color,Adult"

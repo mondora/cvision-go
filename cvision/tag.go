@@ -17,28 +17,25 @@ const (
 // TAGClient struct
 type TAGClient struct {
 	APIToken    *string
-	contentType *string
-	Verbose     bool
+	ContentType *string
 }
 
 // NewTAGClient with parameters
 func NewTAGClient(token string) *TAGClient {
 	return &TAGClient{
 		APIToken:    &token,
-		contentType: nil,
-		Verbose:     true,
+		ContentType: nil,
 	}
 }
 
 // GetTagInfo return json info related to image resourceName
-func (c *TAGClient) GetTagInfo(resourceName string, isURL bool) (*resty.Response, error) {
-	if c.Verbose {
+func (c *TAGClient) GetTagInfo(resourceName string, isURL bool, verbose bool) (*resty.Response, error) {
+	if verbose {
 		log.Printf("> GetTagInfo: %s\n", resourceName)
 	}
 	req := resty.R().
 		SetHeader("Ocp-Apim-Subscription-Key", *c.APIToken).
 		SetHeader("User-Agent", UserAgent)
-
 	if isURL {
 		json, contentType := GetJSONURLPayload(resourceName)
 		return req.

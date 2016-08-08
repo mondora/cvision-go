@@ -12,9 +12,9 @@ import (
 	"encoding/json"
 
 	"github.com/BurntSushi/toml"
+	"github.com/mondora/cvision-go/cvision"
 	"gopkg.in/resty.v0"
-
-	"./cvision"
+	//"./cvision"
 )
 
 // FlagParams cmdline params
@@ -25,6 +25,7 @@ type FlagParams struct {
 	language          string
 	detectOrientation bool
 	jsonPrettyPrint   bool
+	verbose           bool
 }
 
 // CvOcrConfig toml config
@@ -57,20 +58,23 @@ func init() {
 		log.Fatal(err)
 		os.Exit(0)
 	}
-	flag.StringVar(&params.cmd, "c", "tag", "command")
+	flag.StringVar(&params.cmd, "c", "tag", "command ocr|tag|analyze|describe|domain")
 	flag.StringVar(&params.url, "url", "", "url")
 	flag.StringVar(&params.url, "u", "", "url")
 	flag.StringVar(&params.filePath, "file", "", "image path")
 	flag.StringVar(&params.filePath, "f", "", "image path")
 	flag.StringVar(&params.language, "l", "it", "language")
-	flag.BoolVar(&params.jsonPrettyPrint, "pp", false, "language")
+	flag.BoolVar(&params.jsonPrettyPrint, "pp", false, "json pretty print")
 	flag.BoolVar(&params.detectOrientation, "d", true, "detect orientation")
+	flag.BoolVar(&params.verbose, "v", false, "verbose")
 	flag.Parse()
 }
 
 func main() {
-	log.Printf("Microsoft Cognitive Services - Computer Vision API %s", cvision.Version)
-	log.Printf("> POST image: %s\n", params.filePath)
+	if params.verbose {
+		log.Printf("Microsoft Cognitive Services - Computer Vision API %s", cvision.Version)
+		log.Printf("> POST image: %s\n", params.filePath)
+	}
 
 	var resp *resty.Response
 	var err error
@@ -78,37 +82,58 @@ func main() {
 	case "ocr": // OCR
 		cvOCR := cvision.NewOCRClient(config.CvAPIKey1, params.language, params.detectOrientation)
 		if params.url != "" {
-			resp, err = cvOCR.GetOcrInfo(params.url, true)
+			resp, err = cvOCR.GetOcrInfo(params.url, true, params.verbose)
 		} else {
-			resp, err = cvOCR.GetOcrInfo(params.filePath, false)
+			resp, err = cvOCR.GetOcrInfo(params.filePath, false, params.verbose)
 		}
 	case "tag": // TAG
 		cvTAG := cvision.NewTAGClient(config.CvAPIKey1)
 		if params.url != "" {
-			resp, err = cvTAG.GetTagInfo(params.url, true)
+			resp, err = cvTAG.GetTagInfo(params.url, true, params.verbose)
 		} else {
-			resp, err = cvTAG.GetTagInfo(params.filePath, false)
+			resp, err = cvTAG.GetTagInfo(params.filePath, false, params.verbose)
 		}
 	case "analyze": // Analyze Image (include TAG)
 		cvAnalyze := cvision.NewAnalyzeClient(config.CvAPIKey1)
 		if params.url != "" {
-			resp, err = cvAnalyze.GetAnalyzeInfo(params.url, true)
+			resp, err = cvAnalyze.GetAnalyzeInfo(params.url, true, params.verbose)
 		} else {
-			resp, err = cvAnalyze.GetAnalyzeInfo(params.filePath, false)
+			resp, err = cvAnalyze.GetAnalyzeInfo(params.filePath, false, params.verbose)
+		}
+	case "describe": // Describe Image
+		cvDescribe := cvision.NewDescribeClient(config.CvAPIKey1, nil)
+		if params.url != "" {
+			resp, err = cvDescribe.DescribeImage(params.url, true, params.verbose)
+		} else {
+			resp, err = cvDescribe.DescribeImage(params.filePath, false, params.verbose)
+		}
+	case "domain": // List Domain
+		cvListDomain := cvision.NewListDomainClient(config.CvAPIKey1)
+		resp, err = cvListDomain.GetListDomain(params.verbose)
+		if params.verbose && err == nil {
+			list, _ := cvision.UnmarshalListModel(resp.Body())
+			l := len(list.Models)
+			for i := 0; i < l; i++ {
+				fmt.Printf("model found: %s\n", list.Models[i].Name)
+			}
 		}
 	}
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("> resp code: %s\n", resp.Status())
+
 	if resp.StatusCode() == 200 {
+		if params.verbose {
+			log.Printf("> resp code: %s\n", resp.Status())
+		}
 		if params.jsonPrettyPrint {
 			b, _ := prettyprint(resp.Body())
-			log.Printf("\n\n%s\n", b)
+			fmt.Printf("%s\n", b)
 		} else {
-			log.Printf("Body:\n%s\n", resp.Body())
+			fmt.Printf("%s\n", resp.Body())
 		}
 	} else {
+		log.Printf("> resp code: %s\n", resp.Status())
 		log.Printf("%s", resp)
 	}
 }

@@ -18,26 +18,24 @@ const (
 // OCRClient struct
 type OCRClient struct {
 	APIToken          *string
-	language          *string
-	detectOrientation bool
-	Verbose           bool
+	Language          *string
+	DetectOrientation bool
 }
 
 // NewOCRClient with parameters
 func NewOCRClient(token string, language string, detectOrientation bool) *OCRClient {
 	return &OCRClient{
 		APIToken:          &token,
-		language:          &language,
-		detectOrientation: detectOrientation,
-		Verbose:           true,
+		Language:          &language,
+		DetectOrientation: detectOrientation,
 	}
 }
 
 // GetOcrInfo return json info related to image resourceName
-func (c *OCRClient) GetOcrInfo(resourceName string, isURL bool) (*resty.Response, error) {
-	lang := *c.language
-	detOrientation := fmt.Sprintf("%t", c.detectOrientation)
-	if c.Verbose {
+func (c *OCRClient) GetOcrInfo(resourceName string, isURL bool, verbose bool) (*resty.Response, error) {
+	lang := *c.Language
+	detOrientation := fmt.Sprintf("%t", c.DetectOrientation)
+	if verbose {
 		log.Printf("> GetOcrInfo: %s\n", resourceName)
 	}
 	req := resty.R().
