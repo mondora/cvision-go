@@ -58,7 +58,7 @@ func init() {
 		log.Fatal(err)
 		os.Exit(0)
 	}
-	flag.StringVar(&params.cmd, "c", "tag", "command ocr|tag|analyze|describe|domain")
+	flag.StringVar(&params.cmd, "c", "tag", "command ocr|tag|analyze|describe|domain|recognize")
 	flag.StringVar(&params.url, "url", "", "url")
 	flag.StringVar(&params.url, "u", "", "url")
 	flag.StringVar(&params.filePath, "file", "", "image path")
@@ -116,6 +116,14 @@ func main() {
 			for i := 0; i < l; i++ {
 				fmt.Printf("model found: %s\n", list.Models[i].Name)
 			}
+		}
+	case "recognize": // Recognize Domain Specific Content
+		model := "celebrities"
+		cvRecognizeDomain := cvision.NewRecognizeDomainClient(config.CvAPIKey1, model)
+		if params.url != "" {
+			resp, err = cvRecognizeDomain.RecognizeDomain(params.url, true, params.verbose)
+		} else {
+			resp, err = cvRecognizeDomain.RecognizeDomain(params.filePath, false, params.verbose)
 		}
 	}
 	if err != nil {
