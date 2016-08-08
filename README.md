@@ -28,6 +28,7 @@ Basic usage:
 $ ./cv -u <URL_IMAGE> -c [ocr|tag|analyze|describe|recognize] [-pp] [-v]
 $ ./cv -f <IMAGE_PATH> -c [ocr|tag|analyze|describe|recognize] [-pp] [-v]
 $ ./cv -c domain [-pp] [-v]
+$ ./cv [-u <URL_IMAGE>|-f <IMAGE_PATH>] -c thumbnail [-whidth <###>] [-height <###>] [-pp] [-v]
 ```
 
 ### EXAMPLES
@@ -123,10 +124,19 @@ $ ./cv -u "http://img2.tgcom24.mediaset.it/binary/articolo/instagram/94.\$plit/C
 }
 ```
 
+```
+$ ./cv -u http://hq-wall.net/i/med_thumb/05/65/Natalie_Imbruglia_6640d0d2674d4e2cca45330ad4f9ee37.jpg -c thumbnail -height 300 -pp -v > nat.jpg
+2016/08/08 15:55:33 Microsoft Cognitive Services - Computer Vision API v1.0
+2016/08/08 15:55:33 > POST image: 
+2016/08/08 15:55:33 > GetThumbnail: http://hq-wall.net/i/med_thumb/05/65/Natalie_Imbruglia_6640d0d2674d4e2cca45330ad4f9ee37.jpg
+2016/08/08 15:55:33   width: 485 height: 300
+2016/08/08 15:55:54 > resp code: 200 OK Content-Type: image/jpeg
+```
+
 ### FEATURES
 - [x] ANALIZE
 - [x] DESCRIBE
-- [ ] THUMBNAIL
+- [x] THUMBNAIL
 - [x] LIST DOMAIN
 - [x] OCR
 - [x] RECOGNIZE DOMAIN (recognize celebrities)

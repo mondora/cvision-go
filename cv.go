@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"encoding/json"
 
@@ -26,6 +27,8 @@ type FlagParams struct {
 	detectOrientation bool
 	jsonPrettyPrint   bool
 	verbose           bool
+	height            int
+	width             int
 }
 
 // CvOcrConfig toml config
@@ -58,7 +61,7 @@ func init() {
 		log.Fatal(err)
 		os.Exit(0)
 	}
-	flag.StringVar(&params.cmd, "c", "tag", "command ocr|tag|analyze|describe|domain|recognize")
+	flag.StringVar(&params.cmd, "c", "tag", "command ocr|tag|analyze|describe|domain|recognize|thumbnail")
 	flag.StringVar(&params.url, "url", "", "url")
 	flag.StringVar(&params.url, "u", "", "url")
 	flag.StringVar(&params.filePath, "file", "", "image path")
@@ -67,6 +70,8 @@ func init() {
 	flag.BoolVar(&params.jsonPrettyPrint, "pp", false, "json pretty print")
 	flag.BoolVar(&params.detectOrientation, "d", true, "detect orientation")
 	flag.BoolVar(&params.verbose, "v", false, "verbose")
+	flag.IntVar(&params.height, "height", 0, "height")
+	flag.IntVar(&params.width, "width", 0, "width")
 	flag.Parse()
 }
 
@@ -125,20 +130,33 @@ func main() {
 		} else {
 			resp, err = cvRecognizeDomain.RecognizeDomain(params.filePath, false, params.verbose)
 		}
+	case "thumbnail": // Get Thumbnail
+		smartCrop := true
+		cvThumbnail := cvision.NewThumbnailClient(config.CvAPIKey1, params.width, params.height, &smartCrop)
+		if params.url != "" {
+			resp, err = cvThumbnail.GetThumbnail(params.url, true, params.verbose)
+		} else {
+			resp, err = cvThumbnail.GetThumbnail(params.filePath, false, params.verbose)
+		}
 	}
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if resp.StatusCode() == 200 {
+		contentType := resp.Header().Get("Content-Type")
 		if params.verbose {
-			log.Printf("> resp code: %s\n", resp.Status())
+			log.Printf("> resp code: %s Content-Type: %s\n", resp.Status(), contentType)
 		}
-		if params.jsonPrettyPrint {
-			b, _ := prettyprint(resp.Body())
-			fmt.Printf("%s\n", b)
+		if strings.HasPrefix(contentType, "application/json") {
+			if params.jsonPrettyPrint {
+				b, _ := prettyprint(resp.Body())
+				fmt.Printf("%s\n", b)
+			} else {
+				fmt.Printf("%s\n", resp.Body())
+			}
 		} else {
-			fmt.Printf("%s\n", resp.Body())
+			fmt.Printf("%s", resp.Body())
 		}
 	} else {
 		log.Printf("> resp code: %s\n", resp.Status())
