@@ -5,9 +5,9 @@ See https://www.microsoft.com/cognitive-services/en-us/computer-vision-api to ge
 
 ### How to install dependencies
 ```sh
-$ go get github.com/mondora/cvision-go/cvision
-$ go get github.com/BurntSushi/toml
-$ go get gopkg.in/resty.v0
+$ go get -u github.com/mondora/cvision-go/cvision
+$ go get -u github.com/BurntSushi/toml
+$ go get -u gopkg.in/resty.v0
 ```
 These packages will be installed on your [$GOPATH](https://golang.org/doc/install#install) location
 
