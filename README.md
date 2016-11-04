@@ -1,6 +1,8 @@
 # cvision-go
 Microsoft ComputerVision GO client
 
+[![Build Status](https://api.travis-ci.org/mondora/cvision-go.svg?branch=master)](https://api.travis-ci.org/mondora/cvision-go.svg?branch=master)
+
 See https://www.microsoft.com/cognitive-services/en-us/computer-vision-api to get API KEYs
 
 ### How to install dependencies
