@@ -46,6 +46,34 @@ $ ./cv [-u <URL_IMAGE>|-f <IMAGE_PATH>] -c thumbnail [-whidth <###>] [-height <#
 ```
 
 ## Examples
+Recognize celebrities:
+```sh
+$ ./cv -u http://hq-wall.net/i/med_thumb/05/65/Natalie_Imbruglia_6640d0d2674d4e2cca45330ad4f9ee37.jpg  -pp -c recognize
+{
+  "requestId": "0ce6f695-7ea6-4c4f-b891-42e7b589a152",
+  "metadata": {
+    "width": 670,
+    "height": 419,
+    "format": "Jpeg"
+  },
+  "result": {
+    "celebrities": [
+      {
+        "name": "NATALIE IMBRUGLIA",
+        "faceRectangle": {
+          "left": 330,
+          "top": 37,
+          "width": 206,
+          "height": 206
+        },
+        "confidence": 0.999999642
+      }
+    ]
+  }
+}
+```
+![Natalie Imbruglia](http://hq-wall.net/i/med_thumb/05/65/Natalie_Imbruglia_6640d0d2674d4e2cca45330ad4f9ee37.jpg)
+
 ```sh
 $ ./cv -u http://www.onegossip.it/wp-content/uploads/2013/12/Michael_Schumacher.jpg -c recognize -pp
 {
@@ -71,8 +99,8 @@ $ ./cv -u http://www.onegossip.it/wp-content/uploads/2013/12/Michael_Schumacher.
   }
 }
 ```
-
-```
+Find TAGS and Recognize:
+```sh
 $ ./cv -u "http://img2.tgcom24.mediaset.it/binary/articolo/instagram/94.\$plit/C_2_articolo_3024767_upiImagepp.jpg" -pp -v
 2016/08/08 11:25:27 Microsoft Cognitive Services - Computer Vision API v1.0
 2016/08/08 11:25:27 > POST image: 
@@ -137,8 +165,8 @@ $ ./cv -u "http://img2.tgcom24.mediaset.it/binary/articolo/instagram/94.\$plit/C
   }
 }
 ```
-
-```
+Smart Thumbnail:
+```sh
 $ ./cv -u http://hq-wall.net/i/med_thumb/05/65/Natalie_Imbruglia_6640d0d2674d4e2cca45330ad4f9ee37.jpg -c thumbnail -height 300 -pp -v > nat.jpg
 2016/08/08 15:55:33 Microsoft Cognitive Services - Computer Vision API v1.0
 2016/08/08 15:55:33 > POST image: 
