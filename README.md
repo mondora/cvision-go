@@ -1,29 +1,41 @@
 # cvision-go
 Microsoft ComputerVision GO client
 
-[![Build Status](https://api.travis-ci.org/mondora/cvision-go.svg?branch=master)](https://api.travis-ci.org/mondora/cvision-go.svg?branch=master)
+[![GoDoc](https://godoc.org/github.com/mondora/cvision-go?status.svg)](https://godoc.org/github.com/mondora/cvision-go) [![Build Status](https://travis-ci.org/mondora/cvision-go.svg?branch=master)](https://travis-ci.org/mondora/cvision-go) [![Go Report Card](https://goreportcard.com/badge/github.com/mondora/cvision-go)](https://goreportcard.com/report/github.com/mondora/cvision-go)
+
+## Overview
+MS Cognitive Services - Computer Vision API (including OCR service)
+
+This library includes a simple but complete command-line client `cv`
 
 See https://www.microsoft.com/cognitive-services/en-us/computer-vision-api to get API KEYs
 
-### How to install dependencies
+## Features
+- [x] ANALIZE
+- [x] DESCRIBE
+- [x] THUMBNAIL
+- [x] LIST DOMAIN
+- [x] OCR
+- [x] RECOGNIZE DOMAIN (recognize celebrities)
+- [x] TAG
+
+## Install
 ```sh
 $ go get -u github.com/mondora/cvision-go/cvision
-$ go get -u github.com/BurntSushi/toml
-$ go get -u gopkg.in/resty.v0
 ```
-These packages will be installed on your [$GOPATH](https://golang.org/doc/install#install) location
+This package will be installed on your [$GOPATH](https://golang.org/doc/install#install) location
 
-### BUILD
+## Build
 ```sh
 $ go build -o cv
 ```
 
-### BUILD - Cross compile for Raspberry Pi
+## Build - Cross compile for Raspberry Pi
 ```sh
 $ env GOOS=linux GOARCH=arm GOARM=6 go build -v -o cv-rpi
 ```
 
-### USAGE
+## Usage
 First rename file `config.toml.demo` to `config.toml` and replace your API keys.
 Basic usage: 
 ```sh
@@ -33,7 +45,7 @@ $ ./cv -c domain [-pp] [-v]
 $ ./cv [-u <URL_IMAGE>|-f <IMAGE_PATH>] -c thumbnail [-whidth <###>] [-height <###>] [-pp] [-v]
 ```
 
-### EXAMPLES
+## Examples
 ```sh
 $ ./cv -u http://www.onegossip.it/wp-content/uploads/2013/12/Michael_Schumacher.jpg -c recognize -pp
 {
@@ -135,11 +147,10 @@ $ ./cv -u http://hq-wall.net/i/med_thumb/05/65/Natalie_Imbruglia_6640d0d2674d4e2
 2016/08/08 15:55:54 > resp code: 200 OK Content-Type: image/jpeg
 ```
 
-### FEATURES
-- [x] ANALIZE
-- [x] DESCRIBE
-- [x] THUMBNAIL
-- [x] LIST DOMAIN
-- [x] OCR
-- [x] RECOGNIZE DOMAIN (recognize celebrities)
-- [x] TAG
+## Author
+
+[Marco Rozzati](https://github.com/marco-rozz)
+
+## License
+
+MIT.
